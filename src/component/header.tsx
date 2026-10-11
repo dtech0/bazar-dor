@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -59,8 +60,15 @@ export default function Header() {
     <header className="w-full bg-white border-b border-gray-100 py-3.5 px-4 md:px-8 sticky top-0 z-40 shadow-xs">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-[#0e8248] text-white flex items-center justify-center text-xl shadow-xs group-hover:scale-105 transition-transform">
-            🛒
+          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform bg-green-50">
+            <Image
+              src="/logo-icon.png"
+              alt="বাজার দর"
+              width={40}
+              height={40}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
           <div className="flex flex-col text-left">
             <span
