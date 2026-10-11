@@ -5,6 +5,7 @@ import Header from "../component/header";
 import Navbar from "../component/navbar";
 import Marque from "../component/marque";
 import Footer from "../component/footer";
+import { Toaster } from "react-hot-toast";
 
 const notaSerifBengali = Noto_Serif_Bengali({
   variable: "--font-nota-serif-bengali",
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Marque />    
         <main className="flex-1">{children}</main>
         <Footer />
+        <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       </body>
     </html>
   );

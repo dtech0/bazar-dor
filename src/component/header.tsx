@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function Header() {
   const { data: session, isPending } = useSession();
@@ -17,9 +18,41 @@ export default function Header() {
     day: "numeric",
   });
 
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("auth") === "social" && session?.user) {
+      const name = session.user.name || session.user.email?.split("@")[0] || "";
+      toast.success(name ? `স্বাগতম ${name}!` : "স্বাগতম!");
+
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete("auth");
+      window.history.replaceState({}, "", newUrl.pathname + (newUrl.search ? newUrl.search : ""));
+    }
+
+    if (params.get("error")) {
+      const err = params.get("error");
+      const errMap: Record<string, string> = {
+        account_not_linked: "অ্যাকাউন্ট লিঙ্ক করা যায়নি। অন্য পদ্ধতিতে লগইন করুন।",
+        access_denied: "অনুমতি দেওয়া হয়নি।",
+      };
+      toast.error(errMap[err || ""] || "লগইন সফল হয়নি। আবার চেষ্টা করুন।");
+
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete("error");
+      window.history.replaceState({}, "", newUrl.pathname + (newUrl.search ? newUrl.search : ""));
+    }
+  }, [session]);
+
   const handleSignOut = async () => {
-    await signOut();
-    router.push("/");
+    try {
+      await signOut();
+      toast.success("সাইন আউট সফল হয়েছে");
+      router.push("/");
+    } catch (err: any) {
+      toast.error(err?.message || "সাইন আউট করা যায়নি");
+    }
   };
 
   return (
@@ -57,12 +90,14 @@ export default function Header() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span>
-                      {session.user.name ? session.user.name.charAt(0).toUpperCase() : "R"}
+                    <span className="text-emerald-800 font-bold">
+                      {session.user.name
+                        ? session.user.name.charAt(0).toUpperCase()
+                        : session.user.email?.charAt(0).toUpperCase() || "U"}
                     </span>
                   )}
                 </div>
-                <span>{session.user.name || "Rezwan"}</span>
+                <span>{session.user.name || session.user.email?.split("@")[0] || "ইউজার"}</span>
                 <span className="text-xs text-gray-500">▾</span>
               </button>
 
