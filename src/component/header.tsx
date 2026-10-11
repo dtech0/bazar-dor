@@ -60,7 +60,7 @@ export default function Header() {
     <header className="w-full bg-white border-b border-gray-100 py-3.5 px-4 md:px-8 sticky top-0 z-40 shadow-xs">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform bg-green-50">
+          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform bg-emerald-50/80 border-2 border-[#0e8248] p-1">
             <Image
               src="/logo-icon.png"
               alt="বাজার দর"
